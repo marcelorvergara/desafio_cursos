@@ -43,4 +43,13 @@ public class CoursesUseCase {
             return null;
         }
     }
+
+    public String delete(UUID id) {
+        Optional<CursoEntity> existingCourde =  this.coursesRepository.findById(id);
+        if(existingCourde.isEmpty()){
+          return "Curso não encontrado";
+        }
+        this.coursesRepository.deleteById(id);
+        return "Curso " + existingCourde.get().getName() + " removido da base de dados";
+    }
 }

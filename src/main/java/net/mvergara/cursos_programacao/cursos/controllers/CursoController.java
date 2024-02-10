@@ -3,7 +3,6 @@ package net.mvergara.cursos_programacao.cursos.controllers;
 import jakarta.validation.Valid;
 import net.mvergara.cursos_programacao.cursos.entities.CursoEntity;
 import net.mvergara.cursos_programacao.cursos.useCase.CoursesUseCase;
-import net.mvergara.cursos_programacao.exceptions.CursoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +48,15 @@ public class CursoController {
             return  ResponseEntity.ok().body(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@Valid @PathVariable UUID id) {
+        try{
+            return this.coursesUseCase.delete(id);
+        } catch (Exception e) {
+            return "Erro ao deletar registro";
         }
     }
 }
