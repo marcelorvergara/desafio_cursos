@@ -6,7 +6,11 @@ import net.mvergara.cursos_programacao.exceptions.CursoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CoursesUseCase {
@@ -24,5 +28,19 @@ public class CoursesUseCase {
 
     public List<CursoEntity> get() {
         return this.coursesRepository.findAll();
+    }
+
+    public CursoEntity put(UUID id, CursoEntity cursoEntity) {
+        Optional<CursoEntity> existingCourde =  this.coursesRepository.findById(id);
+        if(existingCourde.isPresent()){
+            CursoEntity cursoEntityToUpdate = existingCourde.get();
+            cursoEntityToUpdate.setName(cursoEntity.getName());
+            cursoEntityToUpdate.setCategory(cursoEntity.getCategory());
+            cursoEntityToUpdate.setActive(cursoEntity.isActive());
+            cursoEntityToUpdate.setUpdatedAt(LocalDateTime.now());
+            return this.coursesRepository.save(cursoEntityToUpdate);
+        } else {
+            return null;
+        }
     }
 }
