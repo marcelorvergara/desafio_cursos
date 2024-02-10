@@ -30,9 +30,9 @@ public class CoursesUseCase {
     }
 
     public CursoEntity put(UUID id, CursoEntity cursoEntity) {
-        Optional<CursoEntity> existingCourde =  this.coursesRepository.findById(id);
-        if(existingCourde.isPresent()){
-            CursoEntity cursoEntityToUpdate = existingCourde.get();
+        Optional<CursoEntity> existingCourse =  this.coursesRepository.findById(id);
+        if(existingCourse.isPresent()){
+            CursoEntity cursoEntityToUpdate = existingCourse.get();
             cursoEntityToUpdate.setName(cursoEntity.getName());
             cursoEntityToUpdate.setCategory(cursoEntity.getCategory());
             cursoEntityToUpdate.setActive(cursoEntity.isActive());
@@ -50,5 +50,17 @@ public class CoursesUseCase {
         }
         this.coursesRepository.deleteById(id);
         return "Curso " + existingCourde.get().getName() + " removido da base de dados";
+    }
+
+    public CursoEntity toggleActive(UUID id) {
+        Optional<CursoEntity> existingCourse =  this.coursesRepository.findById(id);
+        if(existingCourse.isPresent()){
+            CursoEntity cursoEntityToUpdate = existingCourse.get();
+            cursoEntityToUpdate.setActive(!existingCourse.get().isActive());
+            cursoEntityToUpdate.setUpdatedAt(LocalDateTime.now());
+            return this.coursesRepository.save(cursoEntityToUpdate);
+        } else {
+            return null;
+        }
     }
 }
